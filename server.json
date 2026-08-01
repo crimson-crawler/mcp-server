@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.crimsoncrawler/mcp-server",
+  "title": "Crimson Crawler",
+  "description": "Enrich, search, assess, and manage threat intelligence through 80+ typed MCP tools.",
+  "version": "4.1.0",
+  "websiteUrl": "https://crimsoncrawler.com/docs/clients/mcp/",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://crimsoncrawler.com/mcp/v1",
+      "headers": [
+        {
+          "name": "apikey",
+          "description": "Your Crimson Crawler API key",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

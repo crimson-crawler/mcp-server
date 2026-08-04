@@ -53,15 +53,19 @@ VS Code and other clients that interpolate with `${env:...}` read the same varia
 
 Set `CRIMSON_CRAWLER_API_KEY` for the process that launches your client, and get an API key from the [Crimson Crawler dashboard](https://crimsoncrawler.com/dashboard). An OS keychain or secret manager is preferred over a shell profile. Never commit a shell profile or client configuration containing the key.
 
-If your client does not interpolate environment variables (Claude Desktop, for example), paste the key as a literal header value. A copyable configuration is available at [`examples/mcp.json`](examples/mcp.json):
+If your client does not interpolate environment variables (Claude Desktop, for example), copy the
+placeholder-only template at [`examples/mcp.example.json`](examples/mcp.example.json) to the ignored
+`mcp.local.json` file or to your client's configuration directory outside this repository. Insert the
+literal key only in that untracked copy:
 
 ```json
 "headers": {
-  "apikey": "your-api-key-here"
+  "apikey": "replace-with-your-api-key"
 }
 ```
 
-A literal key lives in the config file itself. Keep the file out of source control and logs, restrict it to its owner with `chmod 600`, and rotate the key if it is ever exposed.
+A literal key lives in the config file itself. Never edit the tracked example. Keep the local file out of
+source control and logs, restrict it to its owner with `chmod 600`, and rotate the key if it is ever exposed.
 
 ## Data handling
 
@@ -69,7 +73,7 @@ The MCP client sends each selected tool's arguments to the hosted endpoint at `h
 
 ## Status and compatibility
 
-The hosted server and registry metadata declare version `4.1.0`. This repository is a release export rather than the server source; tags and GitHub Releases begin with the first public release.
+The hosted server and registry metadata declare version `4.1.1`. This repository is a release export rather than the server source; tags and GitHub Releases begin with the first public release.
 
 | Client | Minimum requirement |
 |---|---|

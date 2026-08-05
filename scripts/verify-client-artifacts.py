@@ -375,6 +375,13 @@ def verify_source_export(directory: Path, kind: str) -> None:
     if kind in {"python", "typescript", "cli"}:
         required.add(".gitleaks.toml")
         allowed_roots.add(".gitleaks.toml")
+    # The shipped copy of this script runs against a *checked-out* public repository, not an
+    # export directory — `mcp-server.yml` invokes `--source . --source-kind mcp` right after
+    # `actions/checkout`. So `.git` is present there and absent here, which failed every
+    # mcp-server release with `unexpected mcp source roots: .git`. Tolerate the directory and
+    # never descend into it. Nothing is lost: git cannot commit a nested `.git`, so the entry
+    # in `forbidden_source_parts` was guarding a state git itself makes unreachable.
+    allowed_roots.add(".git")
     missing = sorted(item for item in required if not (directory / item).exists())
     if missing:
         fail(f"{directory}: {kind} source export is incomplete: {', '.join(missing)}")
@@ -401,6 +408,10 @@ def verify_source_export(directory: Path, kind: str) -> None:
 
     forbidden_source_parts = {".env", ".git", ".npmrc", "__pycache__", "dist", "node_modules"}
     for path in directory.rglob("*"):
+        # Skip the checkout's own VCS metadata rather than scanning it — see `allowed_roots`
+        # above. Its contents are not shipped source, and packfiles are not text to scan.
+        if ".git" in path.relative_to(directory).parts:
+            continue
         if path.is_symlink():
             fail(f"{directory}: symlink is not allowed: {path.relative_to(directory)}")
         if not path.is_file():

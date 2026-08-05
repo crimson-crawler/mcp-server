@@ -12,6 +12,14 @@ import re
 import sys
 from pathlib import Path
 
+# Loading the sibling verifier below writes `scripts/__pycache__/*.pyc` next to it. When this
+# script validates a *checked-out* repository — `mcp-server.yml` runs `--source .` — that
+# bytecode lands inside the tree being scanned, and `forbidden_source_parts` then fails on
+# `scripts/__pycache__/verify-public-artifacts.cpython-3xx.pyc`. The verifier failed because it
+# ran. Suppress the write rather than tolerate `__pycache__`, which would forfeit a real check:
+# a published export must never ship bytecode.
+sys.dont_write_bytecode = True
+
 _PUBLIC_VERIFIER_PATH = Path(__file__).with_name("verify-public-artifacts.py")
 _PUBLIC_SPEC = importlib.util.spec_from_file_location("verify_public_artifacts", _PUBLIC_VERIFIER_PATH)
 if _PUBLIC_SPEC is None or _PUBLIC_SPEC.loader is None:

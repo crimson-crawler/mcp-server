@@ -73,7 +73,7 @@ The MCP client sends each selected tool's arguments to the hosted endpoint at `h
 
 ## Status and compatibility
 
-The hosted server and registry metadata declare version `4.1.1`. This repository is a release export rather than the server source; tags and GitHub Releases begin with the first public release.
+The hosted server and registry metadata declare version `4.1.2`. This repository is a release export rather than the server source; tags and GitHub Releases begin with the first public release.
 
 | Client | Minimum requirement |
 |---|---|
@@ -152,4 +152,4 @@ The repository contents are licensed under the [Apache License 2.0](LICENSE). Th
 
 Copyright 2026 Def-Logix, Inc.
 
-See [NOTICE](NOTICE) for the Def-Logix and Crimson Crawler relationship, third-party attribution, and trademark terms.
+See [NOTICE](NOTICE) for the Def-Logix, Inc. and Crimson Crawler relationship, third-party attribution, and trademark terms.

@@ -10,7 +10,7 @@
     <img src="assets/crimson-crawler-logo.svg" alt="Crimson Crawler" width="520">
   </a>
 </p>
-<p align="center"><strong>80+ typed threat-intelligence tools for MCP-compatible assistants.</strong></p>
+<p align="center"><strong>94 typed threat-intelligence tools for MCP-compatible assistants.</strong></p>
 <p align="center">
   <a href="https://crimsoncrawler.com/docs/clients/mcp/">MCP guide</a> ·
   <a href="https://crimsoncrawler.com/dashboard">Get an API key</a> ·
@@ -73,7 +73,7 @@ The MCP client sends each selected tool's arguments to the hosted endpoint at `h
 
 ## Status and compatibility
 
-The hosted server and registry metadata declare version `4.1.2`. This repository is a release export rather than the server source; tags and GitHub Releases begin with the first public release.
+The registry metadata declares version `4.1.4`. This repository is a release export rather than the server source; tags and GitHub Releases begin with the first public release.
 
 | Client | Minimum requirement |
 |---|---|
@@ -88,6 +88,7 @@ Client vendors change MCP support independently. Use a current stable client rel
 
 After saving the configuration, restart or reload the client and open its MCP server or tools view. Confirm that `crimson-crawler` connects and lists tools, then invoke one read-only search or enrichment tool with public test data. Do not use sensitive data for the first check.
 
+**Breaking OSV change:** CVE-linked `osv` returns permissive advisories only. Requests that previously received restricted or unknown-licence records must add `osv_restricted`; include every other desired layer because an explicit `include` replaces defaults. On `enrich_package`, `osv_restricted` applies to nested CVEs, not the package advisory list. Check source terms before redistribution.
 ## What the assistant can do
 
 | Surface | Typical work |
@@ -99,15 +100,18 @@ After saving the configuration, restart or reload the client and open its MCP se
 
 The [MCP guide](https://crimsoncrawler.com/docs/clients/mcp/) documents the current tool catalog, request fields, response behavior, account limits, and common errors.
 
-56 of the 86 tools only read. The other 30 change your Platform data: 25 write, and 5 delete. Each tool
-carries an MCP annotation declaring which it is, so a client that honors `destructiveHint` can prompt you
-before a delete runs.
+60 of the 94 tools are read-only. Of the other 34, 26 update Platform data, 5 delete it, and 3 submit
+enrichment jobs. Submits create temporarily stored jobs, count toward usage, and carry non-destructive,
+non-idempotent write annotations; status tools are read-only and billing-exempt. OAuth callers can submit
+and poll with `mcp:read`, but a client's own policy can still restrict write-annotated tools. A client
+that honors `destructiveHint` can prompt before a delete.
 
 ## Before you turn on the write tools
 
 Your MCP client decides which tools an assistant may call, and Crimson Crawler doesn't add a second
-confirmation behind it. If your client supports per-tool approval, turn it on for the `artifact_manager_*`,
-`inventory_manager_*`, and `ai_reports_*` groups. Note that `artifact_manager_bulk_delete` removes many
+confirmation behind it. If your client supports per-tool approval, turn it on for the `artifact_enrich`,
+`inventory_enrich`, and `event_enrich` submits and the `artifact_manager_*`, `inventory_manager_*`,
+and `ai_reports_*` groups. Note that `artifact_manager_bulk_delete` removes many
 artifacts in a single call.
 
 Treat tool output as untrusted text. Artifacts you upload, scans you import, and the proof-of-concept code

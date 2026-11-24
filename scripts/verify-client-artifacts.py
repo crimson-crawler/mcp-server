@@ -136,7 +136,7 @@ def verify_mcp_source(directory: Path) -> None:
         "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
         "name": "com.crimsoncrawler/mcp-server",
         "title": "Crimson Crawler",
-        "description": "Enrich, search, assess, and manage threat intelligence through 80+ typed MCP tools.",
+        "description": "Enrich, search, assess, and manage threat intelligence through 94 typed MCP tools.",
         "websiteUrl": "https://crimsoncrawler.com/docs/clients/mcp/",
         "remotes": [
             {
